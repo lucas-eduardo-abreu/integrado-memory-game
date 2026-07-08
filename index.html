@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Jogo da Memória — Integrado</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="app" aria-live="polite">
+
+    <!-- ATRAÇÃO / REPOUSO (vídeo em loop após 40s sem uso) -->
+    <section id="screen-attract" class="screen" aria-label="Vídeo de atração">
+      <video id="attract-video" data-src="assets/video/manifesto.mp4" playsinline loop preload="none"></video>
+      <div class="attract-hint">Toque na tela para jogar</div>
+    </section>
+
+    <!-- INÍCIO -->
+    <section id="screen-start" class="screen screen--active" aria-label="Menu inicial">
+      <div class="corner-accent" aria-hidden="true"></div>
+      <div class="start-container">
+        <div class="logo-chip logo-chip--lg">
+          <img src="assets/logo.png" alt="Logo Integrado" class="start-logo">
+        </div>
+        <div class="start-button-wrapper">
+          <button id="btn-start" class="btn btn-start">Toque para<br>Jogar!</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SELEÇÃO DE DIFICULDADE -->
+    <section id="screen-select" class="screen" aria-label="Seleção de dificuldade">
+      <div class="corner-accent" aria-hidden="true"></div>
+      <div class="panel panel--select">
+        <h2>Escolha a dificuldade</h2>
+        <div class="difficulty-grid">
+          <button class="btn btn-diff" data-diff="normal">
+            <span class="diff-name">Normal</span>
+            <span class="diff-info">6 cartas em pares · 1min30</span>
+          </button>
+          <button class="btn btn-diff btn-diff--hard" data-diff="dificil">
+            <span class="diff-name">Difícil</span>
+            <span class="diff-info">10 cartas em pares · 1min</span>
+          </button>
+        </div>
+        <button id="btn-back-start" class="btn btn-ghost">Voltar</button>
+      </div>
+    </section>
+
+    <!-- FORMULÁRIO DE LEAD -->
+    <section id="screen-lead" class="screen" aria-label="Cadastro para jogar">
+      <div class="corner-accent" aria-hidden="true"></div>
+      <div class="panel panel--lead">
+        <div class="logo-chip logo-chip--sm">
+          <img src="assets/logo.png" alt="Logo Integrado" class="lead-logo">
+        </div>
+        <h2>Antes de jogar, se apresenta pra gente!</h2>
+        <p class="subtitle">Preencha seus dados para começar</p>
+        <form id="lead-form" novalidate>
+          <label class="field">
+            <span>Nome completo</span>
+            <input type="text" id="lead-name" name="name" placeholder="Seu nome" required autocomplete="name">
+          </label>
+          <label class="field">
+            <span>Telefone</span>
+            <input type="tel" id="lead-phone" name="phone" placeholder="(00) 00000-0000" required autocomplete="tel">
+          </label>
+          <label class="field">
+            <span>E-mail</span>
+            <input type="email" id="lead-email" name="email" placeholder="voce@email.com" required autocomplete="email">
+          </label>
+          <p id="lead-error" class="lead-error" hidden></p>
+          <div class="actions">
+            <button type="submit" class="btn btn-primary btn-lg">Jogar agora</button>
+            <button type="button" id="btn-lead-back" class="btn btn-ghost">Voltar</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- JOGO -->
+    <section id="screen-game" class="screen" aria-label="Tabuleiro do jogo">
+      <header class="topbar" role="toolbar" aria-label="Painel do jogo">
+        <div class="left">
+          <button id="btn-exit" class="btn btn-cta" aria-label="Voltar ao menu">← Menu</button>
+        </div>
+
+        <div class="center">
+          <span id="hud-difficulty" class="badge"></span>
+          <span class="dot">•</span>
+
+          <div id="timebar" class="timebar" role="progressbar"
+               aria-label="Tempo restante" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+            <div class="timebar__track">
+              <div class="timebar__fill" style="width:100%"></div>
+            </div>
+            <span id="hud-time" class="sr-only">00:30</span>
+          </div>
+        </div>
+
+        <div class="right"></div>
+      </header>
+
+      <div id="board" class="board" role="grid" aria-label="Cartas do tabuleiro"></div>
+    </section>
+
+    <!-- VITÓRIA -->
+    <section id="screen-win" class="screen" aria-label="Fim de partida (vitória)">
+      <canvas id="confetti-canvas" class="confetti-canvas" aria-hidden="true"></canvas>
+      <div class="panel panel--win">
+        <h2 class="win-title">Parabéns! 🎉</h2>
+        <div class="actions">
+          <button id="btn-play-again" class="btn btn-primary">Jogar novamente</button>
+          <button id="btn-go-menu" class="btn btn-ghost">Voltar ao menu</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DERROTA -->
+    <section id="screen-lose" class="screen" aria-label="Fim de partida (derrota)">
+      <div class="panel panel--win">
+        <h2 class="win-title">Tempo esgotado ⏰</h2>
+        <div class="actions">
+          <button id="btn-lose-retry" class="btn btn-primary">Tentar novamente</button>
+          <button id="btn-lose-menu" class="btn btn-ghost">Voltar ao menu</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- AVISO MODO DIFÍCIL -->
+    <div id="warning-overlay" class="admin-overlay" hidden>
+      <div class="admin-panel warning-panel">
+        <h2>⚠️ Modo Difícil</h2>
+        <p class="warning-text">Atenção, esse modo tem um tempo menor e com mais cartas.
+        Esteja preparado!</p>
+        <div class="actions">
+          <button id="btn-warning-ok" class="btn btn-primary btn-lg">Estou pronto, vamos lá!</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAINEL ADMINISTRATIVO (F9) -->
+    <div id="admin-overlay" class="admin-overlay" hidden>
+      <div class="admin-panel">
+        <div class="admin-header">
+          <h2>Painel administrativo — Leads</h2>
+          <button id="admin-close" class="btn btn-ghost" aria-label="Fechar">✕</button>
+        </div>
+        <p class="admin-count"><span id="admin-count">0</span> lead(s) cadastrado(s)</p>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Nome</th><th>Telefone</th><th>E-mail</th><th>Dificuldade</th><th>Resultado</th><th>Data</th></tr>
+            </thead>
+            <tbody id="admin-tbody"></tbody>
+          </table>
+        </div>
+        <div class="admin-actions">
+          <button id="admin-export" class="btn btn-primary">⬇ Exportar Excel</button>
+          <button id="admin-clear" class="btn btn-danger">🗑 Limpar leads</button>
+        </div>
+        <p class="admin-hint">Pressione <strong>F9</strong> ou <strong>Esc</strong> para fechar este painel.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="vendor/xlsx.full.min.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
