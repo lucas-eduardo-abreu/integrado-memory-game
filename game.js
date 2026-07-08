@@ -341,7 +341,14 @@ btnBackStart.onclick = () => showScreen("start");
 
 $$('#screen-select .btn-diff').forEach(b => b.onclick = () => {
   state.diff = b.dataset.diff;
-  goToLeadForm();
+  // Formulário de lead desativado temporariamente — pula direto pro jogo.
+  // Para reativar: descomente a linha abaixo e apague o bloco do if/else.
+  // goToLeadForm();
+  if (CONFIG.DIFFS[state.diff]?.warn) {
+    warningOverlay.hidden = false;   // modo difícil ainda mostra o aviso
+  } else {
+    startGameFlow();
+  }
 });
 
 btnExit.onclick=()=>{ stopTimer(); showScreen("start"); };
