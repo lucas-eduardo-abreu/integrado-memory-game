@@ -2,7 +2,7 @@
 const CONFIG = {
   ASSET_BASE: "assets/cards",
   EXT: "png",
-  BACK_IMAGE: "assets/logo.png",
+  BACK_IMAGE: "assets/logo-card.png",
   TOTAL_IMAGES: 10,    // total de imagens disponíveis (enviadas pelo cliente)
   FLIP_BACK_MS: 600,
   IDLE_MS: 40 * 1000, // 40 segundos sem interação => vídeo de atração
