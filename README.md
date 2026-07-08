@@ -5,6 +5,10 @@ Basta abrir o arquivo `index.html` (2 cliques) em qualquer navegador (Chrome/Edg
 preferência). Não precisa de servidor, internet ou instalação — tudo roda localmente,
 inclusive os leads (ficam salvos no `localStorage` do navegador, naquela máquina).
 
+> O vídeo de repouso (`assets/video/manifesto.mp4`) é versionado via **Git LFS**. Para
+> cloná-lo por completo é preciso ter o [Git LFS](https://git-lfs.com) instalado antes do
+> `git clone` — sem ele, o arquivo baixado é só um ponteiro de texto, não o vídeo.
+
 Para rodar em modo totem/kiosk no Chrome, um atalho útil:
 ```
 chrome.exe --kiosk "C:\caminho\para\index.html"
@@ -17,27 +21,25 @@ chrome.exe --kiosk "C:\caminho\para\index.html"
    - **Difícil** — os 10 pares (todas as imagens), 1 minuto para completar. Antes de começar,
      aparece um aviso: *"Atenção, esse modo tem um tempo menor e com mais cartas. Esteja
      preparado!"*
-3. **Cadastro (lead)** — nome, telefone e e-mail. Obrigatório antes de cada nova sessão
-   (jogar de novo/tentar de novo dentro do jogo não pede o formulário de novo — só quando
-   volta ao menu inicial, escolhe a dificuldade de novo, ou quando o vídeo de atração é
-   interrompido).
+3. **Cadastro (lead)** — nome, telefone e e-mail. Obrigatório antes de **cada partida**,
+   inclusive ao clicar em "Jogar novamente"/"Tentar novamente" nas telas de fim de partida
+   (elas voltam para a escolha de dificuldade, não direto pro jogo).
 4. **Jogo** — tabuleiro com as imagens sorteadas para a dificuldade escolhida.
-5. **Vitória / Derrota** — telas de fim de partida com opção de jogar novamente (mesma
-   dificuldade) ou voltar ao menu (escolhe tudo de novo).
+5. **Vitória / Derrota** — telas de fim de partida com opção de jogar novamente (volta para
+   a escolha de dificuldade e pede um novo cadastro) ou voltar ao menu inicial.
 
 ## Resultado no lead
 Cada lead cadastrado guarda também:
 - **Dificuldade** escolhida (Normal/Difícil)
 - **Resultado**: Venceu, Perdeu, ou "—" se a pessoa saiu no meio da partida sem terminar.
-Se a pessoa jogar de novo ("Jogar novamente"/"Tentar novamente") sem voltar ao menu, o
-resultado da nova tentativa substitui o da tentativa anterior no mesmo cadastro (mesma
-pessoa, mesma sessão). Só é criado um cadastro novo quando ela volta ao menu inicial e
-preenche o formulário de novo.
+Como "Jogar novamente"/"Tentar novamente" sempre passam pelo cadastro de novo, cada
+tentativa gera um lead novo e independente — nenhum registro é sobrescrito.
 
 ## Modo de repouso (vídeo)
-Se ninguém interagir com a tela por **5 minutos**, o vídeo `MANIFESTO_VERTICAL.mp4` entra
-em tela cheia, em loop. Qualquer toque/clique interrompe o vídeo e abre direto o formulário
-de cadastro, começando um novo ciclo de lead → jogo.
+Se ninguém interagir com a tela por **40 segundos**, o vídeo `assets/video/manifesto.mp4`
+entra em tela cheia, em loop (exibido inteiro, sem cortes, com barras pretas se a proporção
+da tela não bater com a do vídeo). Qualquer toque/clique interrompe o vídeo e volta para a
+escolha de dificuldade, começando um novo ciclo de lead → jogo.
 
 > Alguns navegadores bloqueiam vídeo com áudio sem interação prévia do usuário. Se isso
 > acontecer, o vídeo cai automaticamente para "mudo" e continua tocando normalmente.
@@ -63,7 +65,7 @@ index.html        → estrutura das telas
 style.css         → identidade visual (cores, layout)
 game.js           → toda a lógica (jogo, leads, vídeo de repouso, painel admin)
 vendor/xlsx.full.min.js → biblioteca para exportar Excel (funciona offline)
-assets/logo 31.png   → logo Integrado usada na tela inicial, cadastro e costas das cartas
+assets/logo.png   → logo Integrado usada na tela inicial, cadastro e costas das cartas
 assets/cards/1.png…10.png → as 10 imagens do jogo
 assets/video/manifesto.mp4 → vídeo do modo de repouso
 ```
@@ -74,7 +76,7 @@ assets/video/manifesto.mp4 → vídeo do modo de repouso
 - `DIFFS.normal.pairs` / `DIFFS.dificil.pairs` — quantidade de pares de cada dificuldade
   (hoje: 6 e 10).
 - `DIFFS.*.cols` — número de colunas do tabuleiro de cada dificuldade.
-- `IDLE_MS` — tempo de inatividade até o vídeo entrar (hoje: 5 minutos).
+- `IDLE_MS` — tempo de inatividade até o vídeo entrar (hoje: 40 segundos).
 
 ## Identidade visual aplicada
 Cores extraídas do manual de marca e do logo enviado:
