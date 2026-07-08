@@ -7,7 +7,7 @@ const CONFIG = {
   FLIP_BACK_MS: 600,
   IDLE_MS: 40 * 1000, // 40 segundos sem interação => vídeo de atração
   DIFFS: {
-    normal:  { label: "Normal",  pairs: 6,  cols: 3, time: 90, warn: false },
+    normal:  { label: "Normal",  pairs: 6,  cols: 3, time: 60, warn: false },
     dificil: { label: "Difícil", pairs: 10, cols: 5, time: 60, warn: true  },
   },
 };
